@@ -1,0 +1,89 @@
+﻿@model IPagedList<Practical_14.Models.employee>
+@using PagedList;
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+	ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+	@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-outline-primary" })
+
+
+	@using (Html.BeginForm("Index", "employee", FormMethod.Get))
+	{
+		@*<div class="d-flex">
+				<input type="text" name="search" placeholder="Enter employee Name" class="form-control" />&nbsp;&nbsp;
+				<input type="submit" , name="submit" value="Search" class="btn btn-outline-info" />
+			</div>*@
+
+	<p class="float-end">
+		<input class="form-control" id="search" type="text" placeholder="Search by name Here" />
+	</p>
+}
+
+
+	</p>
+	<table class="table table-hover  text-center">
+		<thead class="table-info">
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.First().Id)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.First().Name)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.First().DOB)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.First().Age)
+				</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody id="fillHere">
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Id)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.DOB)
+					</td>
+					@if (item.Age == null)
+					{
+						<td>NA</td>
+					}
+					else
+					{
+						<td>
+							@Html.DisplayFor(modelItem => item.Age)
+						</td>
+					}
+					<td>
+						@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-primary" }) |
+						@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-success" }) |
+						@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger" })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	
+	@section scripts
+	{
+		<script src="~/Content/Search.js"></script>
+
+	}
+<div class="pagination" style="margin-left: 0px">
+	Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+	of @Model.PageCount   @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>
+	@*@Html.PagedListPager(Model, i => Url.Action("Index", "employee", new { i }))*@
